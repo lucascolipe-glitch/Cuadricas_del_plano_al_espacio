@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cápsula interactiva de Álgebra y Geometría I sobre ecuaciones cuadráticas, cónicas y superficies cuádricas.">
+  <title>Del plano al espacio | Cónicas y superficies cuádricas</title>
+  <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+  <a class="saltar-contenido" href="#contenido-principal">Saltar al contenido</a>
+
+  <header class="barra-superior" aria-label="Navegación principal">
+    <div class="barra-contenido">
+      <a href="#inicio" class="marca" data-ir="inicio" aria-label="Ir a la portada">
+        <span class="marca-icono" aria-hidden="true">◌</span>
+        <span><strong>Álgebra y Geometría I</strong><small>UNCo · Facultad de Ingeniería</small></span>
+      </a>
+      <nav class="nav-principal" aria-label="Secciones de la cápsula">
+        <button type="button" data-ir="mapa">Mapa</button>
+        <button type="button" data-ir="taller">Taller</button>
+        <button type="button" data-ir="audiovisual">Multimedia</button>
+        <button type="button" data-ir="bibliografia">Créditos</button>
+      </nav>
+      <div class="progreso-global" aria-label="Progreso del recorrido">
+        <span id="texto-progreso">0 de 15 temas</span>
+        <div class="barra-progreso" aria-hidden="true"><span id="barra-progreso"></span></div>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido-principal" tabindex="-1">
+    <!-- ============================================================
+         PANTALLA 1 · PORTADA
+         ============================================================ -->
+    <section id="inicio" class="pantalla activa" aria-labelledby="titulo-principal">
+      <div class="hero contenedor">
+        <div class="hero-texto">
+          <p class="etiqueta">Cápsula de apoyo para el Trabajo Práctico N.º 7</p>
+          <h1 id="titulo-principal">Del plano al espacio</h1>
+          <p class="hero-subtitulo">Leer la geometría escondida en una ecuación de segundo grado</p>
+          <p class="hero-intro">
+            Un recorrido no lineal para reconocer, reducir, graficar y justificar cónicas y superficies cuádricas.
+            Podés comenzar por el puente algebraico, entrar directamente a una cónica o recorrer las trazas de una superficie.
+          </p>
+          <div class="grupo-botones">
+            <button class="boton primario" type="button" data-ir="mapa">Comenzar el recorrido</button>
+            <button class="boton secundario" type="button" data-ir="proposito">Conocer el propósito</button>
+          </div>
+          <p class="nota-corta">La bitácora y el progreso se guardan solamente en este dispositivo.</p>
+        </div>
+        <figure class="hero-visual">
+          <img src="assets/img/hero-geometria.svg" alt="Ilustración que vincula una circunferencia, una parábola y una superficie cuádrica mediante planos de corte.">
+          <figcaption>Una misma familia algebraica puede producir curvas en el plano y superficies en el espacio.</figcaption>
+        </figure>
+      </div>
+      <div class="franja-pregunta contenedor" role="note">
+        <span aria-hidden="true">?</span>
+        <p><strong>Pregunta central:</strong> ¿cómo anticipar la forma, la orientación y las trazas de un objeto geométrico a partir de su ecuación?</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PANTALLA 2 · PROPÓSITO
+         ============================================================ -->
+    <section id="proposito" class="pantalla" aria-labelledby="titulo-proposito">
+      <div class="contenedor seccion-encabezado">
+        <p class="etiqueta">Antes de resolver</p>
+        <h2 id="titulo-proposito">Propósito de la cápsula</h2>
+        <p>
+          La propuesta organiza la teoría y los ejemplos del material de la cátedra en unidades breves. Cada pantalla combina
+          una pregunta, una representación, una decisión matemática y una devolución inmediata. El objetivo no es memorizar una lista
+          de formas, sino aprender a justificar por qué una ecuación representa determinada figura.
+        </p>
+      </div>
+      <div class="contenedor cuadricula-objetivos">
+        <article class="tarjeta">
+          <span class="icono-tarjeta" aria-hidden="true">⌁</span>
+          <h3>Reconocer</h3>
+          <p>Comparar términos cuadráticos, signos, variables ausentes y términos lineales.</p>
+        </article>
+        <article class="tarjeta">
+          <span class="icono-tarjeta" aria-hidden="true">□</span>
+          <h3>Reducir</h3>
+          <p>Usar completamiento de cuadrados para pasar de la forma desarrollada a la canónica.</p>
+        </article>
+        <article class="tarjeta">
+          <span class="icono-tarjeta" aria-hidden="true">◎</span>
+          <h3>Interpretar</h3>
+          <p>Leer centros, vértices, focos, ejes, directrices, asíntotas y semiejes.</p>
+        </article>
+        <article class="tarjeta">
+          <span class="icono-tarjeta" aria-hidden="true">▱</span>
+          <h3>Construir con trazas</h3>
+          <p>Pasar del espacio a curvas planas mediante los cortes x = k, y = k y z = k.</p>
+        </article>
+      </div>
+      <blockquote class="cita-destacada contenedor">
+        “¿Qué información geométrica aparece antes de hacer todas las cuentas?”
+      </blockquote>
+      <div class="contenedor grupo-botones centrado">
+        <button class="boton primario" type="button" data-ir="mapa">Ir al mapa</button>
+        <button class="boton texto" type="button" data-ir="inicio">Volver a la portada</button>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         PANTALLA 3 · MAPA NO LINEAL DE CUATRO NODOS
+         ============================================================ -->
+    <section id="mapa" class="pantalla" aria-labelledby="titulo-mapa">
+      <div class="contenedor seccion-encabezado">
+        <p class="etiqueta">Elegí una entrada</p>
+        <h2 id="titulo-mapa">Mapa del recorrido</h2>
+        <p>Los cuatro nodos se conectan entre sí. Las cónicas y las cuádricas son los dos núcleos temáticos; el puente algebraico y el taller integrador ayudan a entrar y salir de ellos.</p>
+      </div>
+      <div class="contenedor mapa-nodos">
+        <article class="nodo-card nodo-puente">
+          <div class="nodo-numero">01</div>
+          <span class="nodo-icono" aria-hidden="true">□→◎</span>
+          <h3>Puente algebraico</h3>
+          <p>¿Cómo convertir una ecuación desarrollada en una forma que se pueda leer?</p>
+          <ul>
+            <li>completar cuadrados;</li>
+            <li>normalizar el segundo miembro;</li>
+            <li>anticipar el tipo de figura.</li>
+          </ul>
+          <button class="boton primario" type="button" data-ir="puente">Entrar al nodo</button>
+        </article>
+
+        <article class="nodo-card nodo-conicas">
+          <div class="nodo-numero">02</div>
+          <span class="nodo-icono" aria-hidden="true">◯ ∪ ⌒</span>
+          <h3>Cónicas en el plano</h3>
+          <p>¿Qué condición de distancia define cada curva y cómo aparece en su ecuación?</p>
+          <div class="mini-progreso"><span id="progreso-conicas">0/4</span> recorridas</div>
+          <button class="boton primario" type="button" data-ir="conicas">Elegir una cónica</button>
+        </article>
+
+        <article class="nodo-card nodo-cuadricas" id="tarjeta-cuadricas">
+          <div class="nodo-numero">03</div>
+          <span class="nodo-icono" aria-hidden="true">◒</span>
+          <h3>Superficies cuádricas</h3>
+          <p>¿Qué revelan los signos, la variable ausente y las trazas de una ecuación en tres variables?</p>
+          <div class="mini-progreso"><span id="progreso-cuadricas">0/11</span> recorridas</div>
+          <p class="estado-bloqueo" id="estado-bloqueo"><span aria-hidden="true">🔒</span> Nodo con código docente</p>
+          <button class="boton primario" type="button" data-ir="cuadricas">Abrir el laboratorio 3D</button>
+        </article>
+
+        <article class="nodo-card nodo-taller">
+          <div class="nodo-numero">04</div>
+          <span class="nodo-icono" aria-hidden="true">✓</span>
+          <h3>Taller TP 7</h3>
+          <p>¿Podés reconocer, justificar y elegir un procedimiento antes de mirar la resolución?</p>
+          <ul>
+            <li>tres casos encadenados;</li>
+            <li>devolución pedagógica;</li>
+            <li>bitácora por identificador.</li>
+          </ul>
+          <button class="boton primario" type="button" data-ir="taller">Resolver casos</button>
+        </article>
+      </div>
+      <div class="contenedor mapa-recursos">
+        <button class="recurso-rapido" type="button" data-ir="audiovisual"><span aria-hidden="true">▶</span> Laboratorio audiovisual</button>
+        <button class="recurso-rapido" type="button" data-ir="bibliografia"><span aria-hidden="true">≡</span> Bibliografía y créditos</button>
+        <button class="recurso-rapido" type="button" id="reiniciar-progreso"><span aria-hidden="true">↺</span> Reiniciar progreso</button>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         NODO 1 · PUENTE ALGEBRAICO
+         ============================================================ -->
+    <section id="puente" class="pantalla" aria-labelledby="titulo-puente">
+      <div class="contenedor seccion-encabezado con-volver">
+        <div>
+          <p class="etiqueta">Nodo 01</p>
+          <h2 id="titulo-puente">Puente algebraico: de la forma desarrollada a la canónica</h2>
+          <p>La lectura geométrica se vuelve más directa cuando cada bloque cuadrático aparece como un cuadrado perfecto.</p>
+        </div>
+        <button class="boton texto" type="button" data-ir="mapa">← Volver al mapa</button>
+      </div>
+
+      <div class="contenedor pasos-puente">
+        <article class="paso-card">
+          <span>1</span>
+          <h3>Agrupar</h3>
+          <p>Reuní los términos de cada variable y separá la constante.</p>
+          <code>x² − 8x + y² − 2y + 1 = 0</code>
+        </article>
+        <article class="paso-card">
+          <span>2</span>
+          <h3>Completar</h3>
+          <p>Agregá y restá el valor necesario dentro de cada grupo.</p>
+          <code>(x − 4)² − 16 + (y − 1)² − 1 + 1 = 0</code>
+        </article>
+        <article class="paso-card">
+          <span>3</span>
+          <h3>Normalizar y leer</h3>
+          <p>Llevá la ecuación a segundo miembro 1 o a una forma equivalente.</p>
+          <code>(x − 4)² + (y − 1)² = 16</code>
+        </article>
+      </div>
+
+      <div class="contenedor dos-columnas">
+        <article class="bloque-teoria">
+          <h3>Señales rápidas antes de calcular</h3>
+          <div class="tabla-responsive">
+            <table>
+              <thead><tr><th>Patrón</th><th>Lectura inicial</th></tr></thead>
+              <tbody>
+                <tr><td>Dos cuadrados con igual signo e igual coeficiente</td><td>Circunferencia o caso degenerado/imaginario.</td></tr>
+                <tr><td>Dos cuadrados con igual signo y coeficientes distintos</td><td>Elipse o caso degenerado/imaginario.</td></tr>
+                <tr><td>Un solo término cuadrático</td><td>Parábola.</td></tr>
+                <tr><td>Dos cuadrados con signos opuestos</td><td>Hipérbola o par de rectas.</td></tr>
+                <tr><td>En R³ falta una variable</td><td>Superficie cilíndrica paralela a ese eje.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="alerta-conceptual"><strong>Atención:</strong> el patrón permite anticipar, pero la reducción confirma si el conjunto es real, vacío o degenerado.</p>
+        </article>
+        <article class="bloque-video-local">
+          <h3>Ejemplo animado</h3>
+          <video controls preload="metadata" aria-label="Video local sobre completamiento de cuadrados para una circunferencia">
+            <source src="assets/video/01_completar_cuadrados.mp4" type="video/mp4">
+            Tu navegador no puede reproducir el video. Podés consultar el ejemplo escrito en esta misma sección.
+          </video>
+          <p>El clip usa un ejercicio del mismo tipo que los planteados en el TP y muestra cómo la cuenta permite leer centro y radio.</p>
+        </article>
+      </div>
+
+      <div class="contenedor actividad-corta" id="actividad-puente">
+        <div>
+          <p class="identificador">Caso P-01</p>
+          <h3>Decisión rápida</h3>
+          <p>Al reducir una ecuación se obtiene <strong>(x − 1)²/4 + (y + 2)²/9 = 1</strong>. ¿Qué información conviene leer primero?</p>
+        </div>
+        <div class="opciones" data-quiz-simple="puente">
+          <button type="button" data-opcion="0">Solo las intersecciones con los ejes</button>
+          <button type="button" data-opcion="1">Centro, orientación del eje mayor y longitudes de semiejes</button>
+          <button type="button" data-opcion="2">La pendiente de una recta tangente cualquiera</button>
+        </div>
+        <p class="devolucion" id="devolucion-puente" aria-live="polite"></p>
+      </div>
+
+      <div class="contenedor grupo-botones centrado">
+        <button class="boton primario" type="button" data-ir="conicas">Continuar con cónicas</button>
+        <button class="boton secundario" type="button" data-ir="taller">Ir al taller</button>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         NODO 2 · CÓNICAS
+         ============================================================ -->
+    <section id="conicas" class="pantalla" aria-labelledby="titulo-conicas">
+      <div class="contenedor seccion-encabezado con-volver">
+        <div>
+          <p class="etiqueta">Nodo 02</p>
+          <h2 id="titulo-conicas">Cónicas en el plano</h2>
+          <p>Empezá por cualquiera. El progreso invita a completar las cuatro miradas: lugar geométrico, ecuación, elementos y gráfico.</p>
+        </div>
+        <button class="boton texto" type="button" data-ir="mapa">← Volver al mapa</button>
+      </div>
+      <div class="contenedor submapa" id="mapa-conicas" aria-label="Mapa de cónicas"></div>
+      <div class="contenedor detalle-tema" id="detalle-conica" aria-live="polite">
+        <div class="estado-vacio">
+          <img src="assets/img/mapa-2d-3d.svg" alt="Esquema de diferentes cortes de un cono y sus curvas resultantes.">
+          <p>Elegí una cónica del mapa para abrir su microlección.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         NODO 3 · SUPERFICIES CUÁDRICAS
+         ============================================================ -->
+    <section id="cuadricas" class="pantalla" aria-labelledby="titulo-cuadricas">
+      <div class="contenedor seccion-encabezado con-volver">
+        <div>
+          <p class="etiqueta">Nodo 03</p>
+          <h2 id="titulo-cuadricas">Superficies cuádricas y método de las trazas</h2>
+          <p>El laboratorio propone reconstruir una superficie a partir de cortes planos más simples.</p>
+        </div>
+        <button class="boton texto" type="button" data-ir="mapa">← Volver al mapa</button>
+      </div>
+      <div class="contenedor protocolo-trazas">
+        <img src="assets/img/trazas.svg" alt="Esquema de una superficie cortada por planos x igual a k, y igual a k y z igual a k.">
+        <div>
+          <h3>Protocolo de tres preguntas</h3>
+          <ol>
+            <li>¿Qué curva aparece en los planos coordenados?</li>
+            <li>¿Cómo cambia la traza al mover el plano x = k, y = k o z = k?</li>
+            <li>¿La superficie es cerrada, abierta, conexa o tiene más de una hoja?</li>
+          </ol>
+        </div>
+      </div>
+      <div class="contenedor filtros-temas" role="group" aria-label="Filtrar superficies">
+        <button type="button" class="activo" data-filtro-cuadricas="todas">Todas</button>
+        <button type="button" data-filtro-cuadricas="cerradas">Cerradas</button>
+        <button type="button" data-filtro-cuadricas="abiertas">Abiertas</button>
+        <button type="button" data-filtro-cuadricas="cilindricas">Cilíndricas</button>
+        <button type="button" data-filtro-cuadricas="degeneradas">Degeneradas</button>
+      </div>
+      <div class="contenedor submapa submapa-cuadricas" id="mapa-cuadricas" aria-label="Mapa de superficies cuádricas"></div>
+      <div class="contenedor detalle-tema" id="detalle-cuadrica" aria-live="polite">
+        <div class="estado-vacio">
+          <img src="assets/img/trazas.svg" alt="Ilustración del método de las trazas.">
+          <p>Elegí una superficie para estudiar su ecuación y sus cortes principales.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         NODO 4 · TALLER INTEGRADOR Y BITÁCORA
+         ============================================================ -->
+    <section id="taller" class="pantalla" aria-labelledby="titulo-taller">
+      <div class="contenedor seccion-encabezado con-volver">
+        <div>
+          <p class="etiqueta">Nodo 04</p>
+          <h2 id="titulo-taller">Taller de preparación para el TP 7</h2>
+          <p>Tres situaciones encadenadas: reconocer, elegir un procedimiento y justificar una traza.</p>
+        </div>
+        <button class="boton texto" type="button" data-ir="mapa">← Volver al mapa</button>
+      </div>
+
+      <div class="contenedor taller-grid">
+        <article class="actividad-integracion" aria-labelledby="titulo-caso-integracion">
+          <div class="actividad-cabecera">
+            <p id="codigo-caso" class="identificador">Caso I-01</p>
+            <span id="contador-caso">1 de 3</span>
+          </div>
+          <h3 id="titulo-caso-integracion">Caso de integración</h3>
+          <div id="enunciado-caso"></div>
+          <div id="opciones-caso" class="opciones"></div>
+          <div id="feedback-caso" class="feedback-caso" aria-live="polite"></div>
+          <div class="actividad-controles">
+            <button class="boton secundario" id="reiniciar-actividad" type="button">Reiniciar</button>
+            <button class="boton primario" id="siguiente-caso" type="button" disabled>Siguiente caso</button>
+          </div>
+        </article>
+
+        <aside class="panel-bitacora" aria-labelledby="titulo-bitacora">
+          <h3 id="titulo-bitacora">Bitácora personal</h3>
+          <p>Guardá hipótesis, errores frecuentes o decisiones. Cada entrada queda asociada a un identificador.</p>
+          <label for="bitacora-caso">Identificador del caso o tema</label>
+          <select id="bitacora-caso"></select>
+          <label for="bitacora-texto">Anotación</label>
+          <textarea id="bitacora-texto" rows="7" placeholder="Ejemplo: primero miro los signos; después completo cuadrados..."></textarea>
+          <div class="grupo-botones compacto">
+            <button class="boton primario" id="guardar-bitacora" type="button">Guardar</button>
+            <button class="boton secundario" id="exportar-bitacora" type="button">Exportar .txt</button>
+          </div>
+          <p id="estado-bitacora" class="estado-guardado" aria-live="polite"></p>
+          <details>
+            <summary>Ver entradas guardadas</summary>
+            <div id="lista-bitacora" class="lista-bitacora"></div>
+          </details>
+        </aside>
+      </div>
+
+      <div class="contenedor documentos-tp">
+        <h3>Materiales del trabajo práctico</h3>
+        <p>La cápsula no reemplaza el TP ni su resolución: los usa como referencia para preparar estrategias de lectura y resolución.</p>
+        <div class="documentos-grid">
+          <a class="documento-card" href="assets/documentos/TP7.pdf" target="_blank" rel="noopener">
+            <span aria-hidden="true">PDF</span><strong>Trabajo Práctico N.º 7</strong><small>Abrir en una pestaña nueva</small>
+          </a>
+          <a class="documento-card" href="assets/documentos/Solucion_TP7.pdf" target="_blank" rel="noopener">
+            <span aria-hidden="true">PDF</span><strong>Resolución del TP 7</strong><small>Consultar después de intentar</small>
+          </a>
+          <a class="documento-card" href="assets/documentos/Teoria_Conicas.pdf" target="_blank" rel="noopener">
+            <span aria-hidden="true">PDF</span><strong>Teoría de cónicas</strong><small>Lugares geométricos y elementos</small>
+          </a>
+          <a class="documento-card" href="assets/documentos/Teoria_Cuadricas.pdf" target="_blank" rel="noopener">
+            <span aria-hidden="true">PDF</span><strong>Teoría de cuádricas</strong><small>Formas canónicas y trazas</small>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         LABORATORIO AUDIOVISUAL · AUDIO, MÚSICA, VIDEO Y YOUTUBE
+         ============================================================ -->
+    <section id="audiovisual" class="pantalla" aria-labelledby="titulo-audiovisual">
+      <div class="contenedor seccion-encabezado con-volver">
+        <div>
+          <p class="etiqueta">Pausa y cambio de registro</p>
+          <h2 id="titulo-audiovisual">Laboratorio audiovisual</h2>
+          <p>Los recursos cambian la forma de mirar el mismo contenido: una animación muestra el procedimiento, la música habilita una pausa y los videos externos amplían ejemplos.</p>
+        </div>
+        <button class="boton texto" type="button" data-ir="mapa">← Volver al mapa</button>
+      </div>
+
+      <div class="contenedor pausa-grid">
+        <article class="pausa-musical">
+          <h3>Pausa matemática</h3>
+          <p>Elegí una pista instrumental breve y usá la pregunta cambiante como consigna de pausa activa.</p>
+          <audio id="audio-pausa" controls preload="metadata" aria-label="Reproductor de música de la cápsula"></audio>
+          <div id="lista-audios" class="lista-audios"></div>
+          <div class="pregunta-pausa">
+            <p id="texto-pregunta-pausa">¿Qué dato de una ecuación mirás primero y por qué?</p>
+            <button class="boton secundario" id="cambiar-pregunta" type="button">Cambiar pregunta</button>
+          </div>
+        </article>
+
+        <article class="esquema-conceptual">
+          <h3>Esquema conceptual</h3>
+          <img src="assets/img/mapa-conceptual.svg" alt="Mapa conceptual que conecta ecuación general, forma canónica, elementos, trazas y representación gráfica.">
+          <p>El esquema propone un ciclo: reconocer → reducir → interpretar → verificar con trazas o puntos.</p>
+        </article>
+      </div>
+
+      <div class="contenedor videos-locales">
+        <h3>Microvideos creados para la cápsula</h3>
+        <div class="video-grid">
+          <article>
+            <video controls preload="metadata"><source src="assets/video/01_completar_cuadrados.mp4" type="video/mp4"></video>
+            <h4>Completar cuadrados</h4>
+            <p>Del desarrollo a centro y radio.</p>
+          </article>
+          <article>
+            <video controls preload="metadata"><source src="assets/video/02_trazas_elipsoide.mp4" type="video/mp4"></video>
+            <h4>Trazas de un elipsoide</h4>
+            <p>Cómo se achican las elipses al mover el plano.</p>
+          </article>
+          <article>
+            <video controls preload="metadata"><source src="assets/video/03_signos_hiperboloide.mp4" type="video/mp4"></video>
+            <h4>Signos y orientación</h4>
+            <p>Qué indica el término con signo diferente.</p>
+          </article>
+        </div>
+      </div>
+
+      <div class="contenedor youtube-laboratorio">
+        <div class="youtube-info">
+          <p class="identificador">Recurso externo opcional</p>
+          <h3 id="youtube-titulo">Video de divulgación y resolución</h3>
+          <p id="youtube-descripcion"></p>
+          <div class="grupo-botones compacto">
+            <button class="boton secundario" id="youtube-anterior" type="button">Anterior</button>
+            <button class="boton primario" id="youtube-siguiente" type="button">Cambiar video</button>
+          </div>
+          <a id="youtube-enlace" class="enlace-alternativo" target="_blank" rel="noopener">Abrir el video directamente en YouTube</a>
+        </div>
+        <div class="video-embed">
+          <iframe id="youtube-iframe" title="Video educativo externo" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         BIBLIOGRAFÍA, AUTORÍA Y DECLARACIÓN DE IA
+         ============================================================ -->
+    <section id="bibliografia" class="pantalla" aria-labelledby="titulo-bibliografia">
+      <div class="contenedor seccion-encabezado con-volver">
+        <div>
+          <p class="etiqueta">Fuentes y transparencia</p>
+          <h2 id="titulo-bibliografia">Bibliografía y créditos</h2>
+          <p>El contenido matemático de la cápsula se elaboró exclusivamente a partir de los materiales proporcionados por el docente.</p>
+        </div>
+        <button class="boton texto" type="button" data-ir="mapa">← Volver al mapa</button>
+      </div>
+
+      <div class="contenedor bibliografia-grid">
+        <article class="bloque-referencias">
+          <h3>Materiales base</h3>
+          <ul>
+            <li><em>Teoría Cónicas</em>. Álgebra y Geometría I, Ingeniería en Petróleo, Módulo 4, UNCo.</li>
+            <li><em>Teoría de superficies cuádricas</em>. Álgebra y Geometría I, Facultad de Ingeniería, UNCo.</li>
+            <li><em>Trabajo Práctico N.º 7: Ecuaciones de segundo grado en el plano y espacio</em>, primer cuatrimestre 2026.</li>
+            <li><em>Resolución Trabajo Práctico 7</em>, material de la cátedra.</li>
+            <li>Presentaciones y versiones PDF de apoyo sobre cónicas, cilindros, superficies cuádricas y trazas proporcionadas para esta actividad.</li>
+            <li>Visualizaciones HTML/WebGL de circunferencia, elipse, parábola e hipérbola proporcionadas por el docente.</li>
+          </ul>
+          <p class="nota-corta">Los textos de la cápsula son paráfrasis didácticas. No se incorporan citas textuales extensas.</p>
+        </article>
+        <article class="bloque-creditos">
+          <h3>Autoría</h3>
+          <p><strong>Propuesta y curaduría docente:</strong> Lucas Colipe.</p>
+          <p><strong>Destinatarios:</strong> estudiantes de primer año de las carreras de Ingeniería de la Universidad Nacional del Comahue.</p>
+          <p><strong>Propósito:</strong> material de apoyo para iniciar, revisar y resolver el Trabajo Práctico N.º 7.</p>
+          <h3>Uso de inteligencia artificial generativa</h3>
+          <p>La organización de la experiencia, la programación, la adaptación de los textos, las actividades interactivas y los recursos audiovisuales locales fueron desarrollados con asistencia de inteligencia artificial generativa. Las fuentes matemáticas utilizadas son los archivos indicados y las decisiones pedagógicas quedan bajo revisión del docente.</p>
+        </article>
+      </div>
+      <div class="contenedor grupo-botones centrado">
+        <button class="boton primario" type="button" data-ir="mapa">Volver al mapa</button>
+        <button class="boton secundario" type="button" data-ir="inicio">Ir a la portada</button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Diálogo para controlar el acceso al nodo de cuádricas. -->
+  <dialog id="dialog-codigo" aria-labelledby="titulo-dialog-codigo">
+    <form method="dialog" id="form-codigo">
+      <button class="cerrar-dialogo" value="cancel" aria-label="Cerrar">×</button>
+      <p class="etiqueta">Control de avance</p>
+      <h2 id="titulo-dialog-codigo">Código para el nodo de cuádricas</h2>
+      <p>Ingresá el código entregado por el docente. Se guarda en este navegador para no volver a pedirlo.</p>
+      <label for="codigo-cuadricas">Código</label>
+      <input id="codigo-cuadricas" name="codigo" autocomplete="off" autocapitalize="characters" required>
+      <p id="mensaje-codigo" class="mensaje-codigo" aria-live="polite"></p>
+      <div class="grupo-botones compacto">
+        <button class="boton primario" type="submit" value="default">Desbloquear</button>
+        <button class="boton secundario" type="button" id="cancelar-codigo">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer>
+    <div class="contenedor footer-contenido">
+      <p><strong>Álgebra y Geometría I · UNCo</strong><br>Material de apoyo para el TP 7.</p>
+      <button type="button" class="boton texto" data-ir="mapa">Mapa de navegación</button>
+    </div>
+  </footer>
+
+  <noscript>
+    <div class="noscript">Esta cápsula necesita JavaScript para mostrar los recorridos, las actividades y la bitácora.</div>
+  </noscript>
+  <script src="js/app.js"></script>
+</body>
+</html>
