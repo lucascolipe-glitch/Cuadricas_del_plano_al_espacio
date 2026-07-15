@@ -28,6 +28,32 @@ const estado = {
   respuestasIntegracion: []
 };
 
+
+/* --------------------------------------------------------------------------
+   MATHJAX
+   Procesa las expresiones LaTeX que se insertan dinámicamente con innerHTML.
+   -------------------------------------------------------------------------- */
+function procesarMathJax(contenedor = document.body) {
+  const ejecutar = () => {
+    if (!window.MathJax || typeof window.MathJax.typesetPromise !== 'function') {
+      return Promise.resolve();
+    }
+
+    if (typeof window.MathJax.typesetClear === 'function') {
+      window.MathJax.typesetClear([contenedor]);
+    }
+
+    return window.MathJax.typesetPromise([contenedor]);
+  };
+
+  const promesaInicio = window.MathJax?.startup?.promise;
+  const tarea = promesaInicio ? promesaInicio.then(ejecutar) : ejecutar();
+
+  return tarea.catch((error) => {
+    console.error('No se pudieron procesar las fórmulas con MathJax:', error);
+  });
+}
+
 /* --------------------------------------------------------------------------
    DATOS DIDÁCTICOS · CÓNICAS
    Todo el contenido se deriva de los materiales de la cátedra.
@@ -36,21 +62,21 @@ const conicas = [
   {
     id: 'circunferencia', codigo: 'C-01', numero: '01', nombre: 'Circunferencia', icono: '◯', visual: 'circunferencia',
     pregunta: '¿Qué permanece constante cuando un punto recorre la curva?',
-    definicion: 'Lugar geométrico de los puntos del plano cuya distancia a un punto fijo C es constante e igual a r.',
-    formulas: ['(x − h)² + (y − k)² = r²', 'Centro: C = (h, k) · Radio: r'],
+    definicion: String.raw`Lugar geométrico de los puntos \(P=(x,y)\) del plano cuya distancia a un punto fijo \(C=(h,k)\) es constante e igual a \(r\).`,
+    formulas: [String.raw`\[(x-h)^2+(y-k)^2=r^2\]`, String.raw`Centro: \(C=(h,k)\). Radio: \(r>0\).`],
     claves: ['dos términos cuadráticos con el mismo signo y el mismo coeficiente', 'no hay término cruzado en los casos trabajados', 'la forma ordinaria permite leer centro y radio'],
     elementos: ['centro', 'radio', 'diámetro', 'recta tangente y punto de tangencia'],
     ejemplo: {
       titulo: 'Ejemplo del TP: reconocer centro y radio',
-      enunciado: '(x + 1)² + (y − 4)² − 9 = 0',
-      pasos: ['Pasar la constante: (x + 1)² + (y − 4)² = 9.', 'Comparar con (x − h)² + (y − k)² = r².', 'Leer h = −1, k = 4 y r = 3.'],
-      conclusion: 'La curva es una circunferencia de centro (−1, 4) y radio 3.'
+      enunciado: String.raw`\[(x+1)^2+(y-4)^2-9=0\]`,
+      pasos: [String.raw`Pasar la constante: \((x+1)^2+(y-4)^2=9\).`, String.raw`Comparar con \((x-h)^2+(y-k)^2=r^2\).`, String.raw`Leer \(h=-1\), \(k=4\) y \(r=3\).`],
+      conclusion: String.raw`La curva es una circunferencia de centro \(C=(-1,4)\) y radio \(r=3\).`
     },
     quiz: {
-      pregunta: 'Una circunferencia tiene centro (4, −3) y radio 6. ¿Cuál es su ecuación?',
-      opciones: ['(x + 4)² + (y − 3)² = 36', '(x − 4)² + (y + 3)² = 36', '(x − 4)² + (y + 3)² = 6'], correcta: 1,
-      bien: 'Exacto: los signos dentro de los cuadrados son opuestos a las coordenadas del centro y el segundo miembro es r².',
-      mal: 'Revisá dos decisiones: dentro del cuadrado aparece x − h e y − k, y el radio se eleva al cuadrado.'
+      pregunta: String.raw`Una circunferencia tiene centro \(C=(4,-3)\) y radio \(r=6\). ¿Cuál es su ecuación?`,
+      opciones: [String.raw`\((x+4)^2+(y-3)^2=36\)`, String.raw`\((x-4)^2+(y+3)^2=36\)`, String.raw`\((x-4)^2+(y+3)^2=6\)`], correcta: 1,
+      bien: String.raw`Exacto: los signos dentro de los cuadrados son opuestos a las coordenadas del centro y el segundo miembro es \(r^2\).`,
+      mal: String.raw`Revisá dos decisiones: dentro del cuadrado aparece \(x-h\) e \(y-k\), y el radio se eleva al cuadrado.`
     },
     asy: 'assets/3d/circunferencia.html'
   },
@@ -58,18 +84,18 @@ const conicas = [
     id: 'elipse', codigo: 'C-02', numero: '02', nombre: 'Elipse', icono: '⬭', visual: 'elipse',
     pregunta: '¿Por qué la suma de dos distancias puede producir una curva cerrada?',
     definicion: 'Lugar geométrico de los puntos del plano para los cuales la suma de las distancias a dos focos es constante.',
-    formulas: ['(x − h)²/a² + (y − k)²/b² = 1', 'c² = a² − b², usando a como semieje mayor'],
+    formulas: [String.raw`\[\frac{(x-h)^2}{a^2}+\frac{(y-k)^2}{b^2}=1\]`, String.raw`\[c^2=a^2-b^2\qquad (a>b>0)\]`],
     claves: ['dos cuadrados con el mismo signo', 'los denominadores determinan los semiejes', 'el mayor denominador indica la dirección del eje mayor'],
     elementos: ['centro', 'semiejes', 'eje mayor y menor', 'vértices', 'focos', 'excentricidad'],
     ejemplo: {
       titulo: 'Ejemplo del TP: eje mayor vertical',
-      enunciado: '(x + 1/2)²/9 + (y + 2)²/25 = 1',
-      pasos: ['Centro C = (−1/2, −2).', 'El mayor denominador es 25 y está bajo el término de y: el eje mayor es vertical.', 'Semiejes 5 y 3; c² = 25 − 9 = 16, entonces c = 4.'],
-      conclusion: 'Los focos son (−1/2, 2) y (−1/2, −6).'
+      enunciado: String.raw`\[\frac{\left(x+\frac12\right)^2}{9}+\frac{(y+2)^2}{25}=1\]`,
+      pasos: [String.raw`Centro \(C=\left(-\frac12,-2\right)\).`, String.raw`El mayor denominador es \(25\) y está bajo el término de \(y\): el eje mayor es vertical.`, String.raw`Semiejes \(5\) y \(3\); \(c^2=25-9=16\), entonces \(c=4\).`],
+      conclusion: String.raw`Los focos son \(F_1=\left(-\frac12,2\right)\) y \(F_2=\left(-\frac12,-6\right)\).`
     },
     quiz: {
-      pregunta: 'En (x − 1)²/12 + (y + 2)²/16 = 1, ¿qué afirmación es correcta?',
-      opciones: ['El eje mayor es horizontal y mide 8', 'El eje mayor es vertical y su semieje mide 4', 'El centro es (−1, 2)'], correcta: 1,
+      pregunta: String.raw`En \(\dfrac{(x-1)^2}{12}+\dfrac{(y+2)^2}{16}=1\), ¿qué afirmación es correcta?`,
+      opciones: [String.raw`El eje mayor es horizontal y mide \(8\).`, String.raw`El eje mayor es vertical y su semieje mide \(4\).`, String.raw`El centro es \((-1,2)\).`], correcta: 1,
       bien: 'Bien: 16 es el mayor denominador y está en el término de y; por eso el eje mayor es vertical.',
       mal: 'Buscá primero el mayor denominador y observá bajo qué variable aparece. Después leé el centro con signos opuestos.'
     },
@@ -79,20 +105,20 @@ const conicas = [
     id: 'parabola', codigo: 'C-03', numero: '03', nombre: 'Parábola', icono: '⌒', visual: 'parabola',
     pregunta: '¿Cómo se equilibra la distancia a un punto con la distancia a una recta?',
     definicion: 'Lugar geométrico de los puntos que equidistan de un foco y de una recta fija llamada directriz.',
-    formulas: ['(y − k)² = 4p(x − h)', '(x − h)² = 4p(y − k)'],
+    formulas: [String.raw`\[(y-k)^2=4p(x-h)\]`, String.raw`\[(x-h)^2=4p(y-k)\]`],
     claves: ['aparece una sola variable elevada al cuadrado', 'la variable lineal señala el eje de simetría', 'el signo de p determina el sentido de apertura'],
     elementos: ['vértice', 'foco', 'directriz', 'eje de simetría', 'parámetro p'],
     ejemplo: {
       titulo: 'Ejemplo del TP: apertura hacia la izquierda',
-      enunciado: '2y² + 6 = −3x',
-      pasos: ['Despejar: y² = −(3/2)x − 3.', 'Factorizar: y² = −(3/2)(x + 2).', 'Comparar con (y − k)² = 4p(x − h): h = −2, k = 0 y 4p = −3/2.'],
-      conclusion: 'Vértice (−2, 0), p = −3/8; la parábola abre hacia la izquierda.'
+      enunciado: String.raw`\[2y^2+6=-3x\]`,
+      pasos: [String.raw`Despejar: \(y^2=-\frac32x-3\).`, String.raw`Factorizar: \(y^2=-\frac32(x+2)\).`, String.raw`Comparar con \((y-k)^2=4p(x-h)\): \(h=-2\), \(k=0\) y \(4p=-\frac32\).`],
+      conclusion: String.raw`Vértice \(V=(-2,0)\), \(p=-\frac38\); la parábola abre hacia la izquierda.`
     },
     quiz: {
-      pregunta: 'Una parábola tiene vértice en el origen, eje horizontal y pasa por (9, 6). ¿Cuál es su ecuación?',
-      opciones: ['x² = 4y', 'y² = 4x', 'y² = 9x'], correcta: 1,
-      bien: 'Correcto: 6² = 4p·9 da p = 1, por lo tanto y² = 4x.',
-      mal: 'Como el eje es horizontal, la variable cuadrática es y. Sustituí el punto para encontrar p.'
+      pregunta: String.raw`Una parábola tiene vértice en el origen, eje horizontal y pasa por \(P=(9,6)\). ¿Cuál es su ecuación?`,
+      opciones: [String.raw`\(x^2=4y\)`, String.raw`\(y^2=4x\)`, String.raw`\(y^2=9x\)`], correcta: 1,
+      bien: String.raw`Correcto: \(6^2=4p\cdot 9\) da \(p=1\); por lo tanto, \(y^2=4x\).`,
+      mal: String.raw`Como el eje es horizontal, la variable cuadrática es \(y\). Sustituí el punto para encontrar \(p\).`
     },
     asy: 'assets/3d/parabola.html'
   },
@@ -100,20 +126,20 @@ const conicas = [
     id: 'hiperbola', codigo: 'C-04', numero: '04', nombre: 'Hipérbola', icono: ')( ', visual: 'hiperbola',
     pregunta: '¿Qué diferencia produce restar, en lugar de sumar, dos términos cuadráticos?',
     definicion: 'Lugar geométrico de los puntos para los cuales el valor absoluto de la diferencia de las distancias a dos focos es constante.',
-    formulas: ['(x − h)²/a² − (y − k)²/b² = 1', '(y − k)²/a² − (x − h)²/b² = 1', 'c² = a² + b²'],
+    formulas: [String.raw`\[\frac{(x-h)^2}{a^2}-\frac{(y-k)^2}{b^2}=1\]`, String.raw`\[\frac{(y-k)^2}{a^2}-\frac{(x-h)^2}{b^2}=1\]`, String.raw`\[c^2=a^2+b^2\]`],
     claves: ['dos cuadrados con signos opuestos', 'el término positivo determina la dirección del eje real', 'las asíntotas pasan por el centro'],
     elementos: ['centro', 'vértices', 'focos', 'eje real', 'eje imaginario', 'asíntotas'],
     ejemplo: {
       titulo: 'Ejemplo del TP: eje real vertical',
-      enunciado: '−2(x + 2)² + 18(y + 2)² − 18 = 0',
-      pasos: ['Pasar y dividir por 18.', 'Obtener (y + 2)² − (x + 2)²/9 = 1.', 'El término positivo es el de y: el eje real es vertical.'],
-      conclusion: 'Centro (−2, −2), vértices (−2, −1) y (−2, −3); las asíntotas tienen pendientes ±1/3.'
+      enunciado: String.raw`\[-2(x+2)^2+18(y+2)^2-18=0\]`,
+      pasos: [String.raw`Pasar el término independiente y dividir por \(18\).`, String.raw`Obtener \((y+2)^2-\dfrac{(x+2)^2}{9}=1\).`, String.raw`El término positivo es el de \(y\): el eje real es vertical.`],
+      conclusion: String.raw`Centro \(C=(-2,-2)\), vértices \(V_1=(-2,-1)\) y \(V_2=(-2,-3)\); las asíntotas tienen pendientes \(\pm\frac13\).`
     },
     quiz: {
-      pregunta: 'En x²/16 − (y − 1)²/4 = 1, ¿cuáles son las asíntotas?',
-      opciones: ['y − 1 = ±2x', 'y − 1 = ±x/2', 'y = ±4x + 1'], correcta: 1,
-      bien: 'Exacto: para una hipérbola horizontal la pendiente es ±b/a = ±2/4 = ±1/2.',
-      mal: 'Usá el rectángulo auxiliar: a = 4 y b = 2, de modo que la pendiente es ±b/a.'
+      pregunta: String.raw`En \(\dfrac{x^2}{16}-\dfrac{(y-1)^2}{4}=1\), ¿cuáles son las asíntotas?`,
+      opciones: [String.raw`\(y-1=\pm 2x\)`, String.raw`\(y-1=\pm\dfrac{x}{2}\)`, String.raw`\(y=\pm 4x+1\)`], correcta: 1,
+      bien: String.raw`Exacto: para una hipérbola horizontal la pendiente es \(\pm\frac ba=\pm\frac24=\pm\frac12\).`,
+      mal: String.raw`Usá el rectángulo auxiliar: \(a=4\) y \(b=2\), de modo que la pendiente es \(\pm\frac ba\).`
     },
     asy: 'assets/3d/hiperbola.html'
   }
@@ -126,112 +152,112 @@ const cuadricas = [
   {
     id:'esfera', codigo:'Q-01', numero:'01', nombre:'Esfera', icono:'●', visual:'esfera', categoria:'cerradas',
     pregunta:'¿Qué significa estar a una distancia fija de un punto del espacio?',
-    definicion:'Conjunto de puntos del espacio que están a una distancia r de un centro C = (h, k, w).',
-    formulas:['(x − h)² + (y − k)² + (z − w)² = r²'],
+    definicion:String.raw`Conjunto de puntos del espacio que están a una distancia \(r\) de un centro \(C=(h,k,w)\).`,
+    formulas:[String.raw`\[(x-h)^2+(y-k)^2+(z-w)^2=r^2\]`],
     claves:['tres cuadrados con el mismo signo y el mismo coeficiente', 'todas las trazas planas no vacías son circunferencias', 'si el plano pasa por el centro aparece una circunferencia máxima'],
     elementos:['centro', 'radio', 'planos tangentes', 'puntos antipodales'],
-    ejemplo:{titulo:'Ejemplo del TP', enunciado:'x² + y² + z² = 9', pasos:['Centro en el origen.', 'Radio 3.', 'Las trazas x = 0, y = 0 y z = 0 son circunferencias de radio 3.'], conclusion:'Es una esfera cerrada y acotada.'},
-    quiz:{pregunta:'¿Qué traza produce la esfera x² + y² + z² = 9 con el plano z = 2?', opciones:['x² + y² = 5', 'x² + y² = 7', 'x² + y² = 9'], correcta:0, bien:'Bien: sustituir z = 2 deja x² + y² = 9 − 4 = 5.', mal:'La traza se obtiene sustituyendo el valor fijo del plano y simplificando.'}
+    ejemplo:{titulo:'Ejemplo del TP', enunciado:String.raw`\[x^2+y^2+z^2=9\]`, pasos:[String.raw`Centro en el origen: \(C=(0,0,0)\).`, String.raw`Radio \(r=3\).`, String.raw`Las trazas \(x=0\), \(y=0\) y \(z=0\) son circunferencias de radio \(3\).`], conclusion:'Es una esfera cerrada y acotada.'},
+    quiz:{pregunta:String.raw`¿Qué traza produce la esfera \(x^2+y^2+z^2=9\) con el plano \(z=2\)?`, opciones:[String.raw`\(x^2+y^2=5\)`, String.raw`\(x^2+y^2=7\)`, String.raw`\(x^2+y^2=9\)`], correcta:0, bien:String.raw`Bien: sustituir \(z=2\) deja \(x^2+y^2=9-4=5\).`, mal:'La traza se obtiene sustituyendo el valor fijo del plano y simplificando.'}
   },
   {
     id:'elipsoide', codigo:'Q-02', numero:'02', nombre:'Elipsoide', icono:'◉', visual:'elipsoide', categoria:'cerradas',
     pregunta:'¿Cómo cambian las trazas cuando los tres radios principales son distintos?',
     definicion:'Superficie cerrada con tres planos de simetría, cuyas trazas principales son elipses.',
-    formulas:['(x − h)²/a² + (y − k)²/b² + (z − w)²/c² = 1'],
+    formulas:[String.raw`\[\frac{(x-h)^2}{a^2}+\frac{(y-k)^2}{b^2}+\frac{(z-w)^2}{c^2}=1\]`],
     claves:['tres términos cuadrados con el mismo signo', 'segundo miembro positivo', 'los denominadores determinan los semiejes'],
     elementos:['centro', 'tres semiejes', 'vértices sobre los ejes principales'],
-    ejemplo:{titulo:'Ejemplo de reducción', enunciado:'(x − 1)²/4 + (y + 2)²/9 + (z − 3)²/16 = 1', pasos:['Centro (1, −2, 3).', 'Semiejes 2, 3 y 4.', 'Las trazas coordenadas son elipses.'], conclusion:'El semieje mayor es paralelo al eje z.'},
-    quiz:{pregunta:'Al cortar x²/25 + y²/16 + z²/4 = 1 con x = k, ¿cuándo la traza es un punto?', opciones:['|k| < 5', '|k| = 5', '|k| > 5'], correcta:1, bien:'Correcto: en los extremos del semieje x, el corte se reduce a un punto.', mal:'Pensá en el factor 1 − k²/25: debe valer cero para que la elipse colapse a un punto.'}
+    ejemplo:{titulo:'Ejemplo de reducción', enunciado:String.raw`\[\frac{(x-1)^2}{4}+\frac{(y+2)^2}{9}+\frac{(z-3)^2}{16}=1\]`, pasos:[String.raw`Centro \(C=(1,-2,3)\).`, String.raw`Semiejes \(2\), \(3\) y \(4\).`, 'Las trazas coordenadas son elipses.'], conclusion:String.raw`El semieje mayor es paralelo al eje \(z\).`},
+    quiz:{pregunta:String.raw`Al cortar \(\dfrac{x^2}{25}+\dfrac{y^2}{16}+\dfrac{z^2}{4}=1\) con \(x=k\), ¿cuándo la traza es un punto?`, opciones:[String.raw`\(|k|<5\)`, String.raw`\(|k|=5\)`, String.raw`\(|k|>5\)`], correcta:1, bien:String.raw`Correcto: en los extremos del semieje \(x\), el corte se reduce a un punto.`, mal:String.raw`Pensá en el factor \(1-\dfrac{k^2}{25}\): debe valer cero para que la elipse colapse a un punto.`}
   },
   {
     id:'paraboloide-eliptico', codigo:'Q-03', numero:'03', nombre:'Paraboloide elíptico', icono:'∪', visual:'paraboloide-eliptico', categoria:'abiertas',
     pregunta:'¿Qué superficie se reconstruye si las trazas horizontales son elipses que crecen?',
     definicion:'Superficie abierta de una sola pieza; las secciones perpendiculares al eje son elipses y las secciones que contienen al eje son parábolas.',
-    formulas:['(x − h)²/a² + (y − k)²/b² = z − w'],
+    formulas:[String.raw`\[\frac{(x-h)^2}{a^2}+\frac{(y-k)^2}{b^2}=z-w\]`],
     claves:['dos cuadrados con el mismo signo y una variable lineal', 'el signo de la variable lineal determina el sentido de apertura', 'tiene un vértice'],
     elementos:['vértice', 'eje de simetría', 'familia de trazas elípticas'],
-    ejemplo:{titulo:'Ejemplo de la teoría', enunciado:'(x − 1)²/4 + (y + 2)²/9 = z − 3', pasos:['Vértice (1, −2, 3).', 'Eje paralelo a z.', 'Para z = k > 3 aparecen elipses.'], conclusion:'La superficie abre hacia z positivo.'},
-    quiz:{pregunta:'En x² + y²/4 = z, ¿qué ocurre al fijar z = 0?', opciones:['Aparece una elipse', 'Aparece solo el origen', 'Aparece una hipérbola'], correcta:1, bien:'Exacto: x² + y²/4 = 0 solo se cumple en (0,0,0), el vértice.', mal:'La suma de dos cuadrados es cero únicamente cuando ambos son cero.'}
+    ejemplo:{titulo:'Ejemplo de la teoría', enunciado:String.raw`\[\frac{(x-1)^2}{4}+\frac{(y+2)^2}{9}=z-3\]`, pasos:[String.raw`Vértice \(V=(1,-2,3)\).`, String.raw`Eje paralelo a \(z\).`, String.raw`Para \(z=k>3\) aparecen elipses.`], conclusion:String.raw`La superficie abre hacia \(z\) positivo.`},
+    quiz:{pregunta:String.raw`En \(x^2+\dfrac{y^2}{4}=z\), ¿qué ocurre al fijar \(z=0\)?`, opciones:['Aparece una elipse', 'Aparece solo el origen', 'Aparece una hipérbola'], correcta:1, bien:String.raw`Exacto: \(x^2+\dfrac{y^2}{4}=0\) solo se cumple en \((0,0,0)\), el vértice.`, mal:'La suma de dos cuadrados es cero únicamente cuando ambos son cero.'}
   },
   {
     id:'paraboloide-hiperbolico', codigo:'Q-04', numero:'04', nombre:'Paraboloide hiperbólico', icono:'⋈', visual:'paraboloide-hiperbolico', categoria:'abiertas',
     pregunta:'¿Cómo puede una misma superficie producir parábolas con concavidades opuestas?',
     definicion:'Superficie abierta con punto de silla; presenta trazas parabólicas en dos direcciones y trazas hiperbólicas en planos paralelos a la base.',
-    formulas:['(x − h)²/a² − (y − k)²/b² = z − w'],
+    formulas:[String.raw`\[\frac{(x-h)^2}{a^2}-\frac{(y-k)^2}{b^2}=z-w\]`],
     claves:['dos cuadrados con signos opuestos y una variable lineal', 'en el plano z = w aparecen dos rectas', 'no tiene centro; tiene punto de silla'],
     elementos:['punto de silla', 'eje de referencia', 'trazas parabólicas e hiperbólicas'],
-    ejemplo:{titulo:'Forma canónica', enunciado:'x²/4 − z²/9 = y', pasos:['La variable lineal es y.', 'En planos y = k aparecen hipérbolas o rectas.', 'En planos x = constante o z = constante aparecen parábolas.'], conclusion:'El eje de referencia es paralelo a y.'},
-    quiz:{pregunta:'Para z = 0 en x²/4 − y²/9 = z, la traza es:', opciones:['una elipse', 'dos rectas que se cortan', 'un punto'], correcta:1, bien:'Bien: x²/4 − y²/9 = 0 factoriza como dos rectas.', mal:'Cuando el segundo miembro es cero, una diferencia de cuadrados puede factorizarse.'}
+    ejemplo:{titulo:'Forma canónica', enunciado:String.raw`\[\frac{x^2}{4}-\frac{z^2}{9}=y\]`, pasos:[String.raw`La variable lineal es \(y\).`, String.raw`En planos \(y=k\) aparecen hipérbolas o rectas.`, String.raw`En planos \(x=\text{constante}\) o \(z=\text{constante}\) aparecen parábolas.`], conclusion:String.raw`El eje de referencia es paralelo a \(y\).`},
+    quiz:{pregunta:String.raw`Para \(z=0\) en \(\dfrac{x^2}{4}-\dfrac{y^2}{9}=z\), la traza es:`, opciones:['una elipse', 'dos rectas que se cortan', 'un punto'], correcta:1, bien:String.raw`Bien: \(\dfrac{x^2}{4}-\dfrac{y^2}{9}=0\) factoriza como dos rectas.`, mal:'Cuando el segundo miembro es cero, una diferencia de cuadrados puede factorizarse.'}
   },
   {
     id:'hiperboloide-una-hoja', codigo:'Q-05', numero:'05', nombre:'Hiperboloide de una hoja', icono:'⌛', visual:'hiperboloide-una', categoria:'abiertas',
     pregunta:'¿Qué indica el único término cuadrático con signo negativo?',
     definicion:'Superficie abierta y conexa. El eje principal corresponde a la variable cuyo término tiene signo diferente.',
-    formulas:['x²/a² + y²/b² − z²/c² = 1'],
+    formulas:[String.raw`\[\frac{x^2}{a^2}+\frac{y^2}{b^2}-\frac{z^2}{c^2}=1\]`],
     claves:['dos términos positivos y uno negativo', 'la variable con signo negativo marca el eje', 'las trazas perpendiculares al eje son elipses'],
     elementos:['centro', 'eje', 'cintura elíptica', 'trazas elípticas e hiperbólicas'],
-    ejemplo:{titulo:'Ejercicio inicial del TP', enunciado:'x² + y² − z² = 1', pasos:['El signo diferente está en z.', 'Para z = k: x² + y² = 1 + k², circunferencias.', 'Para x = 0 o y = 0: hipérbolas.'], conclusion:'Hiperboloide de una hoja con eje z.'},
-    quiz:{pregunta:'Si la ecuación cambia a x² − y² + z² = 1, ¿qué cambia?', opciones:['Se convierte en un elipsoide', 'El eje pasa a ser el eje y', 'La superficie se traslada una unidad'], correcta:1, bien:'Exacto: la variable con signo negativo cambia de z a y, por eso cambia la orientación.', mal:'La superficie conserva el tipo; cambia la variable con signo diferente y, con ella, el eje.'}
+    ejemplo:{titulo:'Ejercicio inicial del TP', enunciado:String.raw`\[x^2+y^2-z^2=1\]`, pasos:[String.raw`El signo diferente está en \(z\).`, String.raw`Para \(z=k\): \(x^2+y^2=1+k^2\), circunferencias.`, String.raw`Para \(x=0\) o \(y=0\): hipérbolas.`], conclusion:String.raw`Hiperboloide de una hoja con eje \(z\).`},
+    quiz:{pregunta:String.raw`Si la ecuación cambia a \(x^2-y^2+z^2=1\), ¿qué cambia?`, opciones:['Se convierte en un elipsoide', String.raw`El eje pasa a ser el eje \(y\).`, 'La superficie se traslada una unidad'], correcta:1, bien:String.raw`Exacto: la variable con signo negativo cambia de \(z\) a \(y\), por eso cambia la orientación.`, mal:'La superficie conserva el tipo; cambia la variable con signo diferente y, con ella, el eje.'}
   },
   {
     id:'hiperboloide-dos-hojas', codigo:'Q-06', numero:'06', nombre:'Hiperboloide de dos hojas', icono:'◡ ◠', visual:'hiperboloide-dos', categoria:'abiertas',
     pregunta:'¿Por qué algunas trazas cercanas al centro son vacías?',
     definicion:'Superficie abierta formada por dos componentes separadas. El término positivo único determina el eje de las hojas.',
-    formulas:['−x²/a² − y²/b² + z²/c² = 1'],
+    formulas:[String.raw`\[-\frac{x^2}{a^2}-\frac{y^2}{b^2}+\frac{z^2}{c^2}=1\]`],
     claves:['un término positivo y dos negativos', 'la variable positiva marca el eje', 'hay una región central sin puntos'],
     elementos:['centro', 'dos vértices', 'eje de las hojas', 'trazas elípticas e hiperbólicas'],
-    ejemplo:{titulo:'Ejemplo del TP', enunciado:'z²/4 − y²/9 − x²/9 = 1', pasos:['El único término positivo es z²/4.', 'Los vértices están en z = ±2.', 'Para |z| < 2 no hay trazas reales.'], conclusion:'Hiperboloide de dos hojas con eje z.'},
-    quiz:{pregunta:'En z²/4 − x²/9 − y²/9 = 1, la traza z = 3 es:', opciones:['una elipse', 'una hipérbola', 'vacía'], correcta:0, bien:'Correcto: al fijar z = 3 queda x²/9 + y²/9 = 5/4, una circunferencia.', mal:'Sustituí z = 3 y reordená; los términos de x e y quedan sumándose.'}
+    ejemplo:{titulo:'Ejemplo del TP', enunciado:String.raw`\[\frac{z^2}{4}-\frac{y^2}{9}-\frac{x^2}{9}=1\]`, pasos:[String.raw`El único término positivo es \(\dfrac{z^2}{4}\).`, String.raw`Los vértices están en \(z=\pm2\).`, String.raw`Para \(|z|<2\) no hay trazas reales.`], conclusion:String.raw`Hiperboloide de dos hojas con eje \(z\).`},
+    quiz:{pregunta:String.raw`En \(\dfrac{z^2}{4}-\dfrac{x^2}{9}-\dfrac{y^2}{9}=1\), la traza \(z=3\) es:`, opciones:['una elipse', 'una hipérbola', 'vacía'], correcta:0, bien:String.raw`Correcto: al fijar \(z=3\) queda \(\dfrac{x^2}{9}+\dfrac{y^2}{9}=\dfrac54\), una circunferencia.`, mal:String.raw`Sustituí \(z=3\) y reordená; los términos de \(x\) e \(y\) quedan sumándose.`}
   },
   {
     id:'cono-eliptico', codigo:'Q-07', numero:'07', nombre:'Cono elíptico', icono:'◇', visual:'cono', categoria:'abiertas',
     pregunta:'¿Qué cambia cuando el segundo miembro de un hiperboloide se vuelve cero?',
     definicion:'Superficie doble con vértice; las trazas perpendiculares al eje son elipses y las trazas que contienen al eje son pares de rectas.',
-    formulas:['x²/a² + y²/b² − z²/c² = 0'],
+    formulas:[String.raw`\[\frac{x^2}{a^2}+\frac{y^2}{b^2}-\frac{z^2}{c^2}=0\]`],
     claves:['tres cuadrados con signos mezclados', 'segundo miembro igual a cero', 'pasa por el vértice y tiene dos nappes'],
     elementos:['vértice', 'eje', 'generatrices', 'trazas elípticas y pares de rectas'],
-    ejemplo:{titulo:'Ejemplo del TP', enunciado:'x² = y² + z²', pasos:['Reordenar: y² + z² − x² = 0.', 'El término con signo diferente es x².', 'El eje del cono es paralelo a x.'], conclusion:'Es un cono circular con vértice en el origen.'},
-    quiz:{pregunta:'¿Qué se obtiene al cortar y² + z² − x² = 0 con x = 0?', opciones:['una circunferencia', 'solo el origen', 'dos rectas'], correcta:1, bien:'Exacto: y² + z² = 0 solo tiene la solución y = z = 0.', mal:'En el plano perpendicular al eje y pasando por el vértice, la sección colapsa al vértice.'}
+    ejemplo:{titulo:'Ejemplo del TP', enunciado:String.raw`\[x^2=y^2+z^2\]`, pasos:[String.raw`Reordenar: \(y^2+z^2-x^2=0\).`, String.raw`El término con signo diferente es \(x^2\).`, String.raw`El eje del cono es paralelo a \(x\).`], conclusion:'Es un cono circular con vértice en el origen.'},
+    quiz:{pregunta:String.raw`¿Qué se obtiene al cortar \(y^2+z^2-x^2=0\) con \(x=0\)?`, opciones:['una circunferencia', 'solo el origen', 'dos rectas'], correcta:1, bien:String.raw`Exacto: \(y^2+z^2=0\) solo tiene la solución \(y=z=0\).`, mal:'En el plano perpendicular al eje y pasando por el vértice, la sección colapsa al vértice.'}
   },
   {
     id:'cilindro-eliptico', codigo:'Q-08', numero:'08', nombre:'Cilindro elíptico', icono:'▯', visual:'cilindro-eliptico', categoria:'cilindricas',
     pregunta:'¿Qué significa que una variable no aparezca en la ecuación?',
     definicion:'Superficie formada al trasladar una elipse en una dirección fija. La variable ausente puede tomar cualquier valor.',
-    formulas:['x²/a² + y²/b² = 1'],
+    formulas:[String.raw`\[\frac{x^2}{a^2}+\frac{y^2}{b^2}=1\]`],
     claves:['falta una variable', 'la superficie es paralela al eje de la variable ausente', 'la traza útil es la cónica generadora'],
     elementos:['eje de traslación', 'elipse generadora', 'rectas generatrices'],
-    ejemplo:{titulo:'Ejemplo del TP', enunciado:'4x² + y² = 4', pasos:['Dividir por 4: x² + y²/4 = 1.', 'No aparece z.', 'La elipse del plano xy se repite para todo z.'], conclusion:'Cilindro elíptico paralelo al eje z.'},
-    quiz:{pregunta:'La ecuación x² + z² = 25 representa un cilindro paralelo a:', opciones:['eje x', 'eje y', 'eje z'], correcta:1, bien:'Bien: y no aparece y puede variar libremente; las generatrices son paralelas al eje y.', mal:'Buscá la variable ausente: esa es la dirección libre del cilindro.'}
+    ejemplo:{titulo:'Ejemplo del TP', enunciado:String.raw`\[4x^2+y^2=4\]`, pasos:[String.raw`Dividir por \(4\): \(x^2+\dfrac{y^2}{4}=1\).`, String.raw`No aparece \(z\).`, String.raw`La elipse del plano \(xy\) se repite para todo \(z\).`], conclusion:String.raw`Cilindro elíptico paralelo al eje \(z\).`},
+    quiz:{pregunta:String.raw`La ecuación \(x^2+z^2=25\) representa un cilindro paralelo a:`, opciones:[String.raw`eje \(x\)`, String.raw`eje \(y\)`, String.raw`eje \(z\)`], correcta:1, bien:String.raw`Bien: \(y\) no aparece y puede variar libremente; las generatrices son paralelas al eje \(y\).`, mal:'Buscá la variable ausente: esa es la dirección libre del cilindro.'}
   },
   {
     id:'cilindro-hiperbolico', codigo:'Q-09', numero:'09', nombre:'Cilindro hiperbólico', icono:')(', visual:'cilindro-hiperbolico', categoria:'cilindricas',
     pregunta:'¿Cómo se extiende una hipérbola sin cambiar su forma?',
     definicion:'Superficie formada por rectas paralelas que pasan por una hipérbola generadora.',
-    formulas:['x²/a² − y²/b² = 1'],
+    formulas:[String.raw`\[\frac{x^2}{a^2}-\frac{y^2}{b^2}=1\]`],
     claves:['dos cuadrados con signos opuestos', 'falta una variable', 'las trazas perpendiculares al eje libre son hipérbolas iguales'],
     elementos:['hipérbola generadora', 'dirección libre', 'dos familias de ramas'],
-    ejemplo:{titulo:'Forma típica', enunciado:'x²/4 − z²/9 = 1', pasos:['No aparece y.', 'La curva generadora está en el plano xz.', 'Se traslada paralelamente al eje y.'], conclusion:'Cilindro hiperbólico paralelo a y.'},
-    quiz:{pregunta:'En y²/9 − x²/25 = 1, considerada en R³, la dirección libre es:', opciones:['x', 'y', 'z'], correcta:2, bien:'Correcto: z no aparece en la ecuación.', mal:'La variable ausente puede tomar cualquier valor y define la dirección de las generatrices.'}
+    ejemplo:{titulo:'Forma típica', enunciado:String.raw`\[\frac{x^2}{4}-\frac{z^2}{9}=1\]`, pasos:[String.raw`No aparece \(y\).`, String.raw`La curva generadora está en el plano \(xz\).`, String.raw`Se traslada paralelamente al eje \(y\).`], conclusion:String.raw`Cilindro hiperbólico paralelo a \(y\).`},
+    quiz:{pregunta:String.raw`En \(\dfrac{y^2}{9}-\dfrac{x^2}{25}=1\), considerada en \(\mathbb{R}^3\), la dirección libre es:`, opciones:[String.raw`\(x\)`, String.raw`\(y\)`, String.raw`\(z\)`], correcta:2, bien:String.raw`Correcto: \(z\) no aparece en la ecuación.`, mal:'La variable ausente puede tomar cualquier valor y define la dirección de las generatrices.'}
   },
   {
     id:'cilindro-parabolico', codigo:'Q-10', numero:'10', nombre:'Cilindro parabólico', icono:'⌒▯', visual:'cilindro-parabolico', categoria:'cilindricas',
     pregunta:'¿Qué ocurre si una parábola se repite a lo largo de un eje?',
     definicion:'Superficie cilíndrica cuya curva generadora es una parábola.',
-    formulas:['x² = 4py'],
+    formulas:[String.raw`\[x^2=4py\]`],
     claves:['una variable cuadrática y otra lineal', 'la tercera variable está ausente', 'la superficie es abierta'],
     elementos:['parábola generadora', 'eje de traslación', 'vértice lineal'],
-    ejemplo:{titulo:'Forma típica', enunciado:'z² = 4y − 16', pasos:['Reescribir z² = 4(y − 4).', 'No aparece x.', 'La parábola del plano yz se repite para todo x.'], conclusion:'Cilindro parabólico paralelo al eje x.'},
-    quiz:{pregunta:'La ecuación y² + z = 4 representa un cilindro parabólico paralelo a:', opciones:['x', 'y', 'z'], correcta:0, bien:'Exacto: x no aparece.', mal:'La variable ausente determina la dirección libre del cilindro.'}
+    ejemplo:{titulo:'Forma típica', enunciado:String.raw`\[z^2=4y-16\]`, pasos:[String.raw`Reescribir \(z^2=4(y-4)\).`, String.raw`No aparece \(x\).`, String.raw`La parábola del plano \(yz\) se repite para todo \(x\).`], conclusion:String.raw`Cilindro parabólico paralelo al eje \(x\).`},
+    quiz:{pregunta:String.raw`La ecuación \(y^2+z=4\) representa un cilindro parabólico paralelo a:`, opciones:[String.raw`\(x\)`, String.raw`\(y\)`, String.raw`\(z\)`], correcta:0, bien:String.raw`Exacto: \(x\) no aparece.`, mal:'La variable ausente determina la dirección libre del cilindro.'}
   },
   {
     id:'degeneradas', codigo:'Q-11', numero:'11', nombre:'Cuádricas degeneradas', icono:'∥ ·', visual:'degeneradas', categoria:'degeneradas',
     pregunta:'¿Cuándo una ecuación cuadrática deja de describir una superficie completa?',
     definicion:'Casos en los que el conjunto solución se reduce a un punto, una recta, uno o dos planos, o resulta vacío.',
-    formulas:['x² + y² + z² = 0 → punto', 'x² − z² = 0 → dos planos', '(x − 1)² = 0 → un plano'],
+    formulas:[String.raw`\[x^2+y^2+z^2=0\quad\Longrightarrow\quad\text{punto}\]`, String.raw`\[x^2-z^2=0\quad\Longrightarrow\quad\text{dos planos}\]`, String.raw`\[(x-1)^2=0\quad\Longrightarrow\quad\text{un plano}\]`],
     claves:['la ecuación puede factorizar', 'una suma de cuadrados igual a cero obliga a anular cada término', 'un segundo miembro incompatible produce conjunto vacío'],
     elementos:['punto', 'recta', 'plano', 'par de planos', 'conjunto vacío'],
-    ejemplo:{titulo:'Ejemplo de factorización', enunciado:'x² − z² = 0', pasos:['Reconocer diferencia de cuadrados.', 'Factorizar (x − z)(x + z) = 0.', 'Cada factor igual a cero describe un plano.'], conclusion:'El conjunto es la unión de los planos x = z y x = −z.'},
-    quiz:{pregunta:'¿Qué representa (x − 2)² + (z − 1)² = 0 en R³?', opciones:['un punto', 'una recta paralela al eje y', 'un plano'], correcta:1, bien:'Bien: x = 2 y z = 1, mientras y queda libre; por eso es una recta paralela a y.', mal:'La suma de cuadrados obliga a x = 2 y z = 1, pero la variable y no está restringida.'}
+    ejemplo:{titulo:'Ejemplo de factorización', enunciado:String.raw`\[x^2-z^2=0\]`, pasos:['Reconocer diferencia de cuadrados.', String.raw`Factorizar \((x-z)(x+z)=0\).`, 'Cada factor igual a cero describe un plano.'], conclusion:String.raw`El conjunto es la unión de los planos \(x=z\) y \(x=-z\).`},
+    quiz:{pregunta:String.raw`¿Qué representa \((x-2)^2+(z-1)^2=0\) en \(\mathbb{R}^3\)?`, opciones:['un punto', String.raw`una recta paralela al eje \(y\)`, 'un plano'], correcta:1, bien:String.raw`Bien: \(x=2\) y \(z=1\), mientras \(y\) queda libre; por eso es una recta paralela a \(y\).`, mal:String.raw`La suma de cuadrados obliga a \(x=2\) y \(z=1\), pero la variable \(y\) no está restringida.`}
   }
 ];
 
@@ -239,24 +265,24 @@ const cuadricas = [
 const casosIntegracion = [
   {
     codigo:'I-01', titulo:'Reconocer antes de calcular',
-    enunciado:'La ecuación 16x² + 25y² + 160x = −200y − 400 se reduce completando cuadrados. Antes de terminar la cuenta, ¿qué tipo de cónica es razonable anticipar?',
+    enunciado:String.raw`La ecuación \(16x^2+25y^2+160x=-200y-400\) se reduce completando cuadrados. Antes de terminar la cuenta, ¿qué tipo de cónica es razonable anticipar?`,
     opciones:['Parábola, porque hay términos lineales', 'Elipse, porque hay dos términos cuadráticos del mismo signo y distinto coeficiente', 'Hipérbola, porque la constante es negativa'], correcta:1,
     bien:'La anticipación es pertinente: los términos x² e y² tienen el mismo signo y coeficientes distintos. La reducción todavía debe confirmar que la elipse sea real.',
     mal:'Los términos lineales desplazan el centro; no cambian por sí solos la familia. Mirá primero cantidad de términos cuadráticos y signos.'
   },
   {
     codigo:'I-02', titulo:'Elegir un procedimiento',
-    enunciado:'Se conoce una circunferencia de centro (1, −1) tangente a la recta −x + y − 2 = 0. ¿Qué cálculo determina el radio?',
+    enunciado:String.raw`Se conoce una circunferencia de centro \(C=(1,-1)\) tangente a la recta \(-x+y-2=0\). ¿Qué cálculo determina el radio?`,
     opciones:['La pendiente de la recta', 'La distancia del centro a la recta', 'El punto medio entre el centro y el origen'], correcta:1,
     bien:'La tangencia implica que el radio perpendicular a la recta tiene la misma longitud que la distancia del centro a esa recta.',
     mal:'Para una recta tangente, la distancia desde el centro a la recta es exactamente el radio.'
   },
   {
     codigo:'I-03', titulo:'Leer una superficie mediante trazas',
-    enunciado:'Para x² + y² − z² = 1 se fija z = k. ¿Qué familia de trazas aparece y qué permite concluir?',
-    opciones:['x² + y² = 1 + k²: circunferencias; la superficie es un hiperboloide de una hoja con eje z', 'x² + y² = 1 − k²: circunferencias; la superficie es un elipsoide', 'x² − y² = 1 + k²: hipérbolas; la superficie es un cono'], correcta:0,
-    bien:'La traza existe para todo k y su radio crece con |k|. Esa continuidad confirma una sola hoja y el eje dado por el signo negativo.',
-    mal:'Sustituí z = k sin cambiar el signo: x² + y² = 1 + k². Después interpretá cómo varía el radio.'
+    enunciado:String.raw`Para \(x^2+y^2-z^2=1\) se fija \(z=k\). ¿Qué familia de trazas aparece y qué permite concluir?`,
+    opciones:[String.raw`\(x^2+y^2=1+k^2\): circunferencias; la superficie es un hiperboloide de una hoja con eje \(z\).`, String.raw`\(x^2+y^2=1-k^2\): circunferencias; la superficie es un elipsoide.`, String.raw`\(x^2-y^2=1+k^2\): hipérbolas; la superficie es un cono.`], correcta:0,
+    bien:String.raw`La traza existe para todo \(k\) y su radio crece con \(|k|\). Esa continuidad confirma una sola hoja y el eje dado por el signo negativo.`,
+    mal:String.raw`Sustituí \(z=k\) sin cambiar el signo: \(x^2+y^2=1+k^2\). Después interpretá cómo varía el radio.`
   }
 ];
 
@@ -484,7 +510,7 @@ function abrirMicroleccion(tema, tipo) {
             </section>
             <section class="panel-concepto">
               <h4>Forma canónica</h4>
-              ${tema.formulas.map(f => `<span class="formula-destacada">${f}</span>`).join('')}
+              ${tema.formulas.map(f => `<div class="formula-destacada">${f}</div>`).join('')}
             </section>
             <section class="panel-concepto">
               <h4>Claves para reconocerla</h4>
@@ -521,6 +547,7 @@ function abrirMicroleccion(tema, tipo) {
       </div>
     </article>`;
   marcarVisitado(tema.codigo);
+  procesarMathJax(contenedor);
   contenedor.querySelector('.microleccion').focus();
   contenedor.scrollIntoView({behavior:'smooth', block:'start'});
 }
@@ -539,7 +566,8 @@ document.addEventListener('click', (evento) => {
     if (i === indice && i !== tema.quiz.correcta) b.classList.add('incorrecta');
   });
   const feedback = quiz.querySelector('.feedback-micro');
-  feedback.textContent = indice === tema.quiz.correcta ? tema.quiz.bien : tema.quiz.mal;
+  feedback.innerHTML = indice === tema.quiz.correcta ? tema.quiz.bien : tema.quiz.mal;
+  procesarMathJax(quiz);
 });
 
 /* Actividad simple del puente */
@@ -551,9 +579,11 @@ document.querySelectorAll('[data-quiz-simple="puente"] button').forEach((boton, 
       if (i === 1) b.classList.add('correcta');
       if (i === indice && i !== 1) b.classList.add('incorrecta');
     });
-    document.getElementById('devolucion-puente').textContent = correcto
-      ? 'Correcto: la forma canónica permite leer de inmediato el centro, los semiejes y la orientación.'
-      : 'La forma canónica todavía no da una tangente cualquiera. Primero conviene leer centro, semiejes y orientación.';
+    const devolucionPuente = document.getElementById('devolucion-puente');
+    devolucionPuente.innerHTML = correcto
+      ? String.raw`Correcto: la forma canónica permite leer de inmediato el centro, los semiejes y la orientación.`
+      : String.raw`La forma canónica todavía no da una tangente cualquiera. Primero conviene leer centro, semiejes y orientación.`;
+    procesarMathJax(document.getElementById('actividad-puente'));
     marcarVisitado('P-01');
   });
 });
@@ -597,6 +627,7 @@ function renderCasoIntegracion() {
   feedbackCaso.className = 'feedback-caso';
   botonSiguiente.disabled = true;
   botonSiguiente.textContent = estado.casoActual === casosIntegracion.length - 1 ? 'Ver cierre' : 'Siguiente caso';
+  procesarMathJax(document.querySelector('.actividad-integracion'));
 }
 opcionesCaso.addEventListener('click', (evento) => {
   const boton = evento.target.closest('[data-opcion-caso]');
@@ -609,7 +640,8 @@ opcionesCaso.addEventListener('click', (evento) => {
     if (i === elegida && i !== caso.correcta) b.classList.add('incorrecta');
   });
   const acierto = elegida === caso.correcta;
-  feedbackCaso.textContent = acierto ? caso.bien : caso.mal;
+  feedbackCaso.innerHTML = acierto ? caso.bien : caso.mal;
+  procesarMathJax(document.querySelector('.actividad-integracion'));
   feedbackCaso.className = `feedback-caso ${acierto ? 'exito' : 'revisar'}`;
   estado.respuestasIntegracion[estado.casoActual] = {elegida, acierto};
   guardarJSON(STORAGE.actividad, estado.respuestasIntegracion);
@@ -626,6 +658,7 @@ botonSiguiente.addEventListener('click', () => {
     opcionesCaso.innerHTML = '';
     feedbackCaso.className = 'feedback-caso exito';
     feedbackCaso.textContent = 'Podés reiniciar, volver a un nodo o exportar tu bitácora.';
+    procesarMathJax(document.querySelector('.actividad-integracion'));
     botonSiguiente.disabled = true;
   }
 });
@@ -748,6 +781,7 @@ function iniciar() {
   const hash = location.hash.replace('#','');
   const permitidos = ['inicio','proposito','mapa','puente','conicas','cuadricas','taller','audiovisual','bibliografia'];
   if (hash && permitidos.includes(hash)) mostrarPantalla(hash);
+  procesarMathJax(document.body);
 }
 
 iniciar();
