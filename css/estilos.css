@@ -322,7 +322,7 @@ th { background: var(--azul-claro); color: var(--azul-oscuro); }
 
   aspect-ratio: 16 / 9;
   height: auto;
-  min-height: 420px;
+  min-height: 220px;
 
   margin-inline: auto;
   border: none;
@@ -332,7 +332,7 @@ th { background: var(--azul-claro); color: var(--azul-oscuro); }
 @media (max-width: 900px) {
   .estado-vacio iframe {
     width: 90%;
-    min-height: 380px;
+    min-height: 180px;
   }
 }
 
@@ -349,7 +349,7 @@ th { background: var(--azul-claro); color: var(--azul-oscuro); }
 
   .estado-vacio iframe {
     width: 100%;
-    min-height: 300px;
+    min-height: 200px;
     aspect-ratio: 4 / 3;
   }
 }
