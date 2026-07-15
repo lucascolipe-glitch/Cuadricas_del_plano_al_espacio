@@ -97,7 +97,7 @@ const conicas = [
       pregunta: String.raw`En \(\dfrac{(x-1)^2}{12}+\dfrac{(y+2)^2}{16}=1\), ¿qué afirmación es correcta?`,
       opciones: [String.raw`El eje mayor es horizontal y mide \(8\).`, String.raw`El eje mayor es vertical y su semieje mide \(4\).`, String.raw`El centro es \((-1,2)\).`], correcta: 1,
       bien: 'Bien: 16 es el mayor denominador y está en el término de y; por eso el eje mayor es vertical.',
-      mal: 'Buscá primero el mayor denominador y observá bajo qué variable aparece. Después leé el centro con signos opuestos.'
+      mal: 'Buscá primero el mayor denominador y observá bajo qué variable aparece, ese es el eje mayo. Después para buscar el centro hay que buscar que los numeradores que aparecen sean nulos.'
     },
     asy: 'assets/3d/elipse.html'
   },
