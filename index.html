@@ -5,6 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Cápsula interactiva de Álgebra y Geometría I sobre ecuaciones cuadráticas, cónicas y superficies cuádricas.">
   <title>Del plano al espacio | Cónicas y superficies cuádricas</title>
+
+  <!-- MathJax: permite escribir fórmulas con sintaxis LaTeX. -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']],
+        processEscapes: true
+      },
+      chtml: {
+        scale: 1
+      },
+      options: {
+        skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+    };
+  </script>
+  <script
+    id="MathJax-script"
+    defer
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+  </script>
+
   <link rel="stylesheet" href="css/estilos.css">
 </head>
 <body>
@@ -184,19 +207,19 @@
           <span>1</span>
           <h3>Agrupar</h3>
           <p>Reuní los términos de cada variable y separá la constante.</p>
-          <code>x² − 8x + y² − 2y + 1 = 0</code>
+          <div class="formula-destacada">\[x^2-8x+y^2-2y+1=0\]</div>
         </article>
         <article class="paso-card">
           <span>2</span>
           <h3>Completar</h3>
           <p>Agregá y restá el valor necesario dentro de cada grupo.</p>
-          <code>(x − 4)² − 16 + (y − 1)² − 1 + 1 = 0</code>
+          <div class="formula-destacada">\[(x-4)^2-16+(y-1)^2-1+1=0\]</div>
         </article>
         <article class="paso-card">
           <span>3</span>
           <h3>Normalizar y leer</h3>
           <p>Llevá la ecuación a segundo miembro 1 o a una forma equivalente.</p>
-          <code>(x − 4)² + (y − 1)² = 16</code>
+          <div class="formula-destacada">\[(x-4)^2+(y-1)^2=16\]</div>
         </article>
       </div>
 
@@ -211,7 +234,7 @@
                 <tr><td>Dos cuadrados con igual signo y coeficientes distintos</td><td>Elipse o caso degenerado/imaginario.</td></tr>
                 <tr><td>Un solo término cuadrático</td><td>Parábola.</td></tr>
                 <tr><td>Dos cuadrados con signos opuestos</td><td>Hipérbola o par de rectas.</td></tr>
-                <tr><td>En R³ falta una variable</td><td>Superficie cilíndrica paralela a ese eje.</td></tr>
+                <tr><td>En \(\mathbb{R}^3\) falta una variable</td><td>Superficie cilíndrica paralela a ese eje.</td></tr>
               </tbody>
             </table>
           </div>
@@ -231,7 +254,7 @@
         <div>
           <p class="identificador">Caso P-01</p>
           <h3>Decisión rápida</h3>
-          <p>Al reducir una ecuación se obtiene <strong>(x − 1)²/4 + (y + 2)²/9 = 1</strong>. ¿Qué información conviene leer primero?</p>
+          <p>Al reducir una ecuación se obtiene \(\dfrac{(x-1)^2}{4}+\dfrac{(y+2)^2}{9}=1\). ¿Qué información conviene leer primero?</p>
         </div>
         <div class="opciones" data-quiz-simple="puente">
           <button type="button" data-opcion="0">Solo las intersecciones con los ejes</button>
@@ -268,7 +291,8 @@
             width="100%"
             height="600"
             style="border:none;"
-            alt="Esquema de diferentes cortes de un cono y sus curvas resultantes.">
+            title="Esquema de diferentes cortes de un cono y sus curvas resultantes."
+            loading="lazy">
           </iframe>
           <!---<img src="assets/img/mapa-2d-3d.svg" alt="Esquema de diferentes cortes de un cono y sus curvas resultantes.">
           -->
@@ -296,7 +320,7 @@
           <h3>Protocolo de tres preguntas</h3>
           <ol>
             <li>¿Qué curva aparece en los planos coordenados?</li>
-            <li>¿Cómo cambia la traza al mover el plano x = k, y = k o z = k?</li>
+            <li>¿Cómo cambia la traza al mover el plano \(x=k\), \(y=k\) o \(z=k\)?</li>
             <li>¿La superficie es cerrada, abierta, conexa o tiene más de una hoja?</li>
           </ol>
         </div>
@@ -524,6 +548,6 @@
   <noscript>
     <div class="noscript">Esta cápsula necesita JavaScript para mostrar los recorridos, las actividades y la bitácora.</div>
   </noscript>
-  <script src="js/app.js"></script>
+  <script defer src="js/app.js"></script>
 </body>
 </html>
