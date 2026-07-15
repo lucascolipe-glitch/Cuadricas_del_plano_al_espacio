@@ -91,7 +91,7 @@ const conicas = [
       titulo: 'Ejemplo del TP: eje mayor vertical',
       enunciado: String.raw`\[\frac{\left(x+\frac12\right)^2}{9}+\frac{(y+2)^2}{25}=1\]`,
       pasos: [String.raw`Centro \(C=\left(-\frac12,-2\right)\).`, String.raw`El mayor denominador es \(25\) y está bajo el término de \(y\): el eje mayor es vertical.`, String.raw`Semiejes \(5\) y \(3\); \(c^2=25-9=16\), entonces \(c=4\).`],
-      conclusion: String.raw`Los focos son \(F_1=\left(-\frac12,2\right)\) y \(F_2=\left(-\frac12,-6\right)\).`
+      conclusion: String.raw`Los focos esta en el eje mayor y a \(4\) unidades del centro, Es decir son \(F_1=\left(-\frac12,2\right)\) y \(F_2=\left(-\frac12,-6\right)\).`
     },
     quiz: {
       pregunta: String.raw`En \(\dfrac{(x-1)^2}{12}+\dfrac{(y+2)^2}{16}=1\), ¿qué afirmación es correcta?`,
