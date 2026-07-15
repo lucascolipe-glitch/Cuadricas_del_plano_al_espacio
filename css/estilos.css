@@ -237,15 +237,37 @@ p { margin: 0 0 1em; }
 .pasos-puente { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 18px; }
 .paso-card { background: white; border: 1px solid var(--borde); border-radius: var(--radio); padding: 22px; box-shadow: var(--sombra); }
 .paso-card > span { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; background: var(--azul); color: white; font-weight: 900; }
-.paso-card code, .formula-destacada {
+.paso-card code,
+.formula-destacada {
   display: block;
+  width: 100%;
   padding: 12px 14px;
   border-radius: 12px;
   background: #f1f5fb;
   color: var(--azul-oscuro);
-  font-family: "Cambria Math", "STIX Two Math", Georgia, serif;
   font-size: 1.02rem;
   white-space: normal;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+/* MathJax conserva la tipografía matemática y permite desplazar fórmulas largas. */
+.formula-destacada {
+  text-align: center;
+}
+
+.formula-destacada mjx-container {
+  margin: .25rem 0 !important;
+}
+
+mjx-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+mjx-container[display="true"] {
+  margin: .7rem 0 !important;
 }
 .dos-columnas { display: grid; grid-template-columns: minmax(0,1fr) minmax(320px,.82fr); gap: 22px; margin-top: 22px; }
 .tabla-responsive { width: 100%; overflow-x: auto; }
